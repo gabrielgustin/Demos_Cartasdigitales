@@ -38,11 +38,10 @@ body{font-family:Montserrat,system-ui,sans-serif;color:var(--txt);background:var
 .bar ul::-webkit-scrollbar{display:none}
 .bar a{display:block;white-space:nowrap;padding:6px 14px;border:1px solid var(--line);border-radius:999px;color:var(--txt);text-decoration:none;font-weight:700;font-size:.78rem}
 .bar a[aria-current="true"]{background:var(--rosa);border-color:var(--rosa)}
-.search{max-width:900px;margin:0 auto;padding:4px 16px 10px}
-.search input{width:100%;padding:9px 14px 9px 38px;border:1px solid var(--line);border-radius:999px;background:#1c1c1c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9b4b8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='M20 20l-4-4'/%3E%3C/svg%3E") 13px center/17px no-repeat;color:var(--txt);font:inherit;font-size:.9rem}
-.search input::placeholder{color:var(--mute)}
-.search input:focus{outline:2px solid var(--rosa);outline-offset:1px}
-.vacio{display:none;padding:44px 0;text-align:center;color:var(--mute)}
+.bar .pd-search{max-width:900px;padding:4px 16px 10px}
+.bar .pd-search input{height:42px;background:#1c1c1c}
+.bar .pd-sx{width:30px;height:30px;margin-top:-15px}
+.bar .pd-sr{margin-top:7px}
 
 /* ---------- secciones ---------- */
 main{padding-bottom:8px}
@@ -66,13 +65,16 @@ main{padding-bottom:8px}
 .it h4 .star{color:var(--rosa);margin-left:4px}
 .it p{grid-column:1/-1;font-size:.85rem;line-height:1.45;color:var(--mute)}
 .it .v{font-weight:500;font-size:.95rem;text-align:right;white-space:nowrap}
-.it .v.no{color:#555}
+.it .v.no{color:#555;text-align:center}
+.it .v[data-pd-v]{padding:6px 2px 5px;border:1px solid var(--line);border-radius:10px;background:var(--card);text-align:center;font-weight:600;font-size:.86rem}
+.it .v[data-pd-v].pd-sel{background:#2a1320}
 .leg,.it{grid-template-columns:1fr repeat(var(--n,1),var(--w,auto))}
 .leg{display:grid;gap:0 12px;align-items:end;padding:10px 0 2px}
 .leg span{display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:700;font-size:.6rem;text-align:center;line-height:1.15;color:var(--mute)}
 .leg img{height:26px;width:auto;max-width:34px;object-fit:contain}
-.grp[data-n="2"]{--n:2;--w:76px}
-.grp[data-n="3"]{--n:3;--w:66px}
+.grp[data-n="2"]{--n:2;--w:82px}
+.grp[data-n="3"]{--n:3;--w:72px}
+.grp[data-n] .it,.grp[data-n] .leg{gap:3px 6px;align-items:center}
 
 /* chips: burgers y chopp */
 .chips{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
@@ -103,10 +105,9 @@ footer p{margin-top:12px;font-size:.78rem;color:var(--mute)}
 </header>
 <div class="bar">
   <ul id="nav"></ul>
-  <div class="search"><input id="q" type="search" placeholder="Buscar en la carta…" aria-label="Buscar en la carta" autocomplete="off"></div>
+  <div id="qslot"></div>
 </div>
 <main class="wrap" id="menu"></main>
-<p class="vacio wrap" id="vacio">No encontramos nada con esa búsqueda. Probá con otra palabra.</p>
 <div class="wrap"><div class="marcas" aria-label="Marcas">
   <img src="img/martini.webp" alt="Martini" loading="lazy"><img src="img/bacardi.webp" alt="Bacardí" loading="lazy"><img src="img/gancia.webp" alt="Gancia" loading="lazy"><img src="img/bombay.webp" alt="Bombay Sapphire" loading="lazy"><img src="img/amargo.webp" alt="Amargo Obrero" loading="lazy">
 </div></div>
@@ -249,12 +250,15 @@ const row = (it, g) => {
   const cols = g.cols, list = Array.isArray(it.p) ? it.p : [it.p];
   const head = `<h4>${it.n}${it.star ? '<span class="star" title="Favorito">★</span>' : ''}</h4>`, desc = it.d ? `<p>${it.d}</p>` : '';
   if (g.mode === 'chips') {
-    const chips = list.map((v, i) => v == null ? '' : `<span class="chip" data-pd-v="${i}">${icon(cols[i].ic)}<span><small>${cols[i].l}</small><b>${money(v)}</b></span></span>`).join('');
+    let k = 0; // data-pd-v cuenta solo los precios que existen
+    const chips = list.map((v, i) => v == null ? '' : `<span class="chip" data-pd-v="${k++}">${icon(cols[i].ic)}<span><small>${cols[i].l}</small><b>${money(v)}</b></span></span>`).join('');
     return `<li class="it big"${Pedido.attr(it.n, it.p, {d: it.d, cols})} data-pd-block>${head}${desc}<div class="chips">${chips}</div></li>`;
   }
   const n = cols ? cols.length : 1;
-  const cells = Array.from({length: n}, (_, i) => list[i] == null ? '<span class="v no">–</span>' : `<span class="v">${money(list[i])}</span>`).join('');
-  return `<li class="it" style="--n:${n}"${Pedido.attr(it.n, it.p, {d: it.d, cols})} data-pd-block>${head}${cells}${desc}</li>`;
+  // una columna: el + va al lado del precio; varias: cada precio es el botón de su medida
+  let k = 0;
+  const cells = Array.from({length: n}, (_, i) => list[i] == null ? '<span class="v no">–</span>' : `<span class="v"${n > 1 ? ` data-pd-v="${k++}"` : ''}>${money(list[i])}</span>`).join('');
+  return `<li class="it" style="--n:${n}"${Pedido.attr(it.n, it.p, {d: it.d, cols})}>${head}${cells}${desc}</li>`;
 };
 
 const group = g => {
@@ -280,25 +284,7 @@ menu.innerHTML = SECS.map(section).join('');
 document.getElementById('nav').innerHTML = SECS.map(s => `<li><a href="#${s.id}">${s.nav || s.t}</a></li>`).join('');
 
 // ---------- pedido para el salón (módulo compartido) ----------
-Pedido.init({"search": false, "theme": {"btn": "#ff1493", "btnFg": "#ffffff", "bg": "#1a1a1a", "fg": "#ffffff", "mute": "#b9b4b8", "line": "rgba(255,255,255,.14)", "price": "#ff5cb4", "field": "rgba(255,255,255,.09)", "font": "Montserrat,system-ui,sans-serif"}});
-
-// ---------- buscador ----------
-const q = document.getElementById('q'), vacio = document.getElementById('vacio');
-const norm = t => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
-q.addEventListener('input', () => {
-  const term = norm(q.value.trim());
-  let any = false;
-  menu.querySelectorAll('.sec').forEach(sec => {
-    let secAny = false;
-    sec.querySelectorAll('.grp').forEach(g => {
-      let grpAny = false;
-      g.querySelectorAll('.it').forEach(it => { const ok = !term || norm(it.textContent).includes(term); it.hidden = !ok; grpAny ||= ok; });
-      g.hidden = !grpAny; secAny ||= grpAny;
-    });
-    sec.hidden = !secAny; any ||= secAny;
-  });
-  vacio.style.display = any ? 'none' : 'block';
-});
+Pedido.init({"searchBefore": "#qslot", "searchText": "Buscar en la carta…", "theme": {"btn": "#ff1493", "btnFg": "#ffffff", "bg": "#1a1a1a", "fg": "#ffffff", "mute": "#b9b4b8", "line": "rgba(255,255,255,.14)", "price": "#ff5cb4", "field": "rgba(255,255,255,.09)", "font": "Montserrat,system-ui,sans-serif"}});
 
 // la carta se dibuja con JS: el navegador ya no salta solo al #hash
 if (location.hash) document.querySelector(location.hash)?.scrollIntoView();

@@ -10,7 +10,7 @@
      searchText: '¿Qué tenés…?'     texto del buscador
      searchBefore, containers       dónde va el buscador / qué bloques se ocultan al filtrar
      nav:        '#nav'             lista de secciones (se le agregan los bordes difuminados)
-     unit:       ['plato','platos'] cómo se cuentan los ítems
+     unit:       ['plato','platos'] cómo se cuentan los ítems (por defecto: producto/productos)
      pickText:   'Elegí el tamaño'  título del selector de variantes
      seed:       false | ['Nombre'] pedido de ejemplo al abrir (demo)
      whatsapp:   '5493510000000'    agrega "Enviar por WhatsApp" al resumen
@@ -30,9 +30,9 @@ const pop = el => { if (!el) return; el.classList.remove('pd-pop'); void el.offs
 const T = {
   add: n => `Agregar ${n} al pedido`, less: n => `Quitar una unidad de ${n}`, more: n => `Agregar una unidad de ${n}`,
   pick: n => `Elegir opciones de ${n}`, pickText: 'Elegí una opción', view: 'Ver pedido', ready: 'Pedido listo', dine: 'Pedido para el salón',
-  items: n => n === 1 ? '1 plato' : `${n} platos`,
+  items: n => n === 1 ? '1 producto' : `${n} productos`,
   title: 'Mi pedido', hint: 'Ajustá las cantidades y, cuando esté listo, mostráselo al mozo.',
-  empty: 'Tu pedido está vacío', emptyHint: 'Tocá + en los platos que quieras y aparecen acá.', seeMenu: 'Ver la carta',
+  empty: 'Tu pedido está vacío', emptyHint: 'Tocá + en lo que quieras pedir y aparece acá.', seeMenu: 'Ver la carta',
   total: 'Total estimado', make: 'Hacer pedido', each: 'c/u',
   show: 'Mostrale esta pantalla al mozo cuando se acerque a tu mesa.', done: 'Listo', edit: 'Modificar pedido',
   note: 'Aclaraciones para el mozo', notePh: 'Ej.: sin sal, alergia a frutos secos, punto de la carne…',
@@ -490,6 +490,8 @@ function setupSearch(root, o) {
     }
     [...root.children].forEach(c => { if (!c.matches('[data-pd]') && !c.querySelector('[data-pd]')) hide(c); });
     tally.hidden = !hits.length; tally.textContent = T.results(hits.length);
+    // buscador fijo arriba (o carta ya desplazada): los resultados arrancan a la vista
+    if (root.getBoundingClientRect().top < -40) root.scrollIntoView({block: 'start'});
     none.hidden = !!hits.length; noneMsg.textContent = T.none(raw);
     mark(hitsByName, term);
   };
