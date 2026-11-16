@@ -437,7 +437,7 @@ function paintBar() {
 function setupSearch(root, o) {
   if (o.search === false) return;
   const input = h('input', {type: 'search', placeholder: T.search, 'aria-label': T.searchLabel, autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false', enterkeyhint: 'search'});
-  const wipe = () => { input.value = ''; run(); };
+  const wipe = () => { input.value = ''; input.dispatchEvent(new Event('input', {bubbles: true})); }; // con evento: la carta puede reaccionar
   const clear = h('button', {class: 'pd-sx', type: 'button', 'aria-label': T.clearSearch, hidden: true, html: ICON.x, onclick: () => { wipe(); input.focus(); }});
   const tally = h('p', {class: 'pd-sr', 'aria-live': 'polite', hidden: true});
   const box = h('div', {class: 'pd-search', role: 'search'}, h('div', {class: 'pd-sf'}, h('label', {}, icon('search'), input), clear), tally);

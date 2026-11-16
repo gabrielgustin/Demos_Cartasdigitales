@@ -70,7 +70,8 @@ main{padding:36px 0 10px}
 .prices{display:flex;gap:14px;text-align:right;align-self:start}
 .pr{font-family:Oswald;font-weight:500;font-size:1.08rem;letter-spacing:.06em;white-space:nowrap;color:var(--red)}
 .pr small{display:block;font-family:Oswald;font-weight:400;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin-bottom:1px}
-.it.wide .prices{grid-column:1/-1;justify-content:flex-start;flex-wrap:wrap;text-align:left;gap:8px 20px;margin-top:2px}
+.it.wide .prices{grid-column:1/-1;justify-content:flex-start;align-items:flex-end;flex-wrap:wrap;text-align:left;gap:8px 20px;margin-top:2px}
+.it.wide .prices .pd-ctl{margin-left:auto}
 .side{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:.8rem;color:var(--mute)}
 .side svg{width:22px;height:22px;flex:none;color:var(--ink)}
 .side b{font-family:Oswald;font-weight:500;letter-spacing:.08em;color:var(--ink)}
@@ -97,6 +98,11 @@ main{padding:36px 0 10px}
 @keyframes fade{0%{opacity:0}100%{opacity:1}}
 @keyframes drift{50%{transform:translateY(8px)}}
 @keyframes chip{50%{transform:scale(1.08)}}
+/* pedido (módulo compartido) con la tipografía de la carta */
+body .pd-bar .pd-lt,body .pd-main,body .pd-ghost{font-family:Oswald,sans-serif;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+body .pd-hd h2,body .pd-info h2{font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+body .pd-ln h4{font-weight:500;letter-spacing:.08em;text-transform:uppercase}
+body .pd-bar{box-shadow:0 14px 30px -10px rgba(0,0,0,.55),inset 0 -2px 0 var(--cu)}
 @media (max-width:900px){.deco{display:none}}
 @media (max-width:640px){
   .hero{padding-top:84px}
@@ -248,9 +254,10 @@ const money = n => '$ ' + n.toLocaleString('es-AR');
 const price = (v, label) => `<span class="pr">${label ? `<small>${label}</small>` : ''}${money(v)}</span>`;
 const prices = p => typeof p === 'object' ? Object.entries(p).map(([k, v]) => price(v, k)).join('') : price(p);
 
-const item = (it, gf) => `<li class="it${typeof it.p === 'object' && Object.keys(it.p).length > 2 ? ' wide' : ''}"${Pedido.attr(it.n, it.p, {d: it.d})}>
-  <h3>${it.nw ? '<span class="nw">New</span>' : ''}${it.st ? '<span class="st">★</span> ' : ''}${it.n}${it.st ? ' <span class="st">★</span>' : ''}${it.gf || gf ? GF : ''}</h3>
-  <div class="prices">${prices(it.p)}</div>
+const wide = it => typeof it.p === 'object' && Object.keys(it.p).length > 2;
+const item = (it, gf) => `<li class="it${wide(it) ? ' wide' : ''}"${Pedido.attr(it.n, it.p, {d: it.d})}>
+  <h3>${it.nw ? '<span class="nw">New</span>' : ''}${it.st ? '<span class="st">★</span> ' : ''}${it.n}${it.st ? '&nbsp;<span class="st">★</span>' : ''}${it.gf || gf ? GF : ''}</h3>
+  <div class="prices"${wide(it) ? ' data-pd-slot' : ''}>${prices(it.p)}</div>
   ${it.d ? `<p>${it.d}</p>` : ''}
 </li>`;
 
@@ -265,7 +272,7 @@ document.getElementById('menu').innerHTML = SECS.map(section).join('');
 document.getElementById('nav').innerHTML = SECS.map(s => `<li><a href="#${s.id}">${s.nav || s.t}</a></li>`).join('');
 
 // ---------- pedido para el salón (módulo compartido) ----------
-Pedido.init({"theme": {"btn": "#383838", "btnFg": "#ffffff", "bg": "#fbf8f4", "fg": "#2b2b2b", "mute": "#6b6560", "line": "#e3dad1", "price": "#a3302b", "font": "Montserrat,system-ui,sans-serif", "head": "Oswald,sans-serif"}});
+Pedido.init({"theme": {"btn": "#383838", "btnFg": "#ffffff", "bg": "#fbf8f4", "fg": "#2b2b2b", "mute": "#6b6560", "line": "#e3dad1", "price": "#a3302b", "font": "Montserrat,system-ui,sans-serif", "head": "Oswald,sans-serif", "radius": "2px", "sheet": "6px"}});
 document.getElementById('gf-legend').outerHTML = GF.replace('class="gf"', '');
 
 // ---------- scroll-spy ----------

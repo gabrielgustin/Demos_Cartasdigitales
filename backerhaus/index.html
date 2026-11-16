@@ -120,6 +120,11 @@ main{padding:30px 0 10px;min-height:60vh}
 @keyframes rise{0%{opacity:0;transform:translateY(40%)}100%{opacity:1;transform:none}}
 @keyframes fade{0%{opacity:0}100%{opacity:1}}
 @keyframes pop{0%{opacity:0;transform:scale(.4) rotate(-30deg)}100%{opacity:1;transform:rotate(-6deg)}}
+/* pedido (módulo compartido) con la tipografía de la carta */
+body .pd-bar .pd-lt,body .pd-main,body .pd-ghost{font-family:Oswald,sans-serif;font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+body .pd-hd h2,body .pd-info h2,body .pd-ln h4{font-weight:500;letter-spacing:.03em;text-transform:uppercase}
+body .pd-search input{background:#fbf4e3}
+body .pd-box{background:var(--paper) radial-gradient(ellipse at 50% 0,#fbf3e1 0,transparent 70%) no-repeat}
 @media (max-width:640px){
   .hero{padding-top:58px}
   .stamp{top:10px;font-size:.66rem}
@@ -379,11 +384,14 @@ const menu = document.getElementById('menu'), tabsEl = document.getElementById('
 tabsEl.innerHTML = TABS.map(t => `<button class="tab${t.okt ? ' okt' : ''}" role="tab" data-tab="${t.id}">${t.t}<small>${t.s}</small></button>`).join('');
 
 // ---------- pedido para el salón (módulo compartido) ----------
-Pedido.init({"theme": {"btn": "#1c2e5c", "btnFg": "#f6ead0", "bg": "#f6ead0", "fg": "#1c2e5c", "mute": "#4d4a45", "line": "rgba(28,46,92,.22)", "price": "#c4202d", "font": "Lora,Georgia,serif", "head": "Oswald,sans-serif"}});
+Pedido.init({"theme": {"btn": "#1c2e5c", "btnFg": "#f6ead0", "bg": "#f6ead0", "fg": "#1c2e5c", "mute": "#4d4a45", "line": "rgba(28,46,92,.22)", "price": "#c4202d", "font": "Lora,Georgia,serif", "head": "Oswald,sans-serif", "radius": "3px", "sheet": "10px"}});
 
-let spy, rv, current;
+let spy, rv, current, shown, searchingAll = false;
 function show(id, scroll) {
   const tab = TABS.find(t => t.id === id) || TABS[1];
+  shown = tab.id;
+  if (searchingAll) { searchingAll = false; const si = document.querySelector('.pd-search input'); if (si && si.value) { si.value = ''; si.dispatchEvent(new Event('input')); } }
+  chips.hidden = false;
   tabsEl.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab.id));
   menu.innerHTML = (tab.okt ? OKT_HEAD : '') + `<div class="grid">${tab.secs.map((s, i) => section(s, `${tab.id}-${i}`)).join('')}</div>`;
   chips.innerHTML = tab.secs.map((s, i) => `<li><a href="#${tab.id}-${i}">${s.t}</a></li>`).join('');
@@ -406,7 +414,7 @@ function observe() {
   const links = [...chips.querySelectorAll('a')];
   spy = new IntersectionObserver(es => es.forEach(e => {
     const a = links.find(l => l.hash === '#' + e.target.id);
-    if (!e.isIntersecting || a === current) return;
+    if (!a || !e.isIntersecting || a === current) return;
     current?.removeAttribute('aria-current');
     a.setAttribute('aria-current', 'true');
     current = a;
@@ -422,6 +430,20 @@ chips.addEventListener('click', e => {
   if (!a) return;
   e.preventDefault();
   document.querySelector(a.hash).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+});
+
+// ---------- buscador: busca en toda la carta, no solo en el momento del día que está abierto ----------
+const searchInput = document.querySelector('.pd-search input');
+searchInput?.addEventListener('input', () => {
+  const q = searchInput.value.trim();
+  if (q && !searchingAll) {
+    searchingAll = true;
+    const seen = new Set();
+    menu.innerHTML = `<div class="grid">${TABS.flatMap(tab => tab.secs.map((s, i) => seen.has(s.t) ? '' : (seen.add(s.t), section(s, `${tab.id}-${i}`)))).join('')}</div>`;
+    tabsEl.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-selected', 'false'));
+    chips.innerHTML = ''; chips.hidden = true;
+    spy?.disconnect(); rv?.disconnect(); current = null;
+  } else if (!q && searchingAll) { searchingAll = false; show(shown); }
 });
 
 const logo = document.querySelector('.hero .brand');
