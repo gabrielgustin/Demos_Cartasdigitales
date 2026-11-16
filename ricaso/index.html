@@ -4,7 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ricaso · Carta</title>
+<meta name="description" content="Carta de Ricaso: burgers, wraps, lomos, milanesas, ensaladas y tragos. Sucursales en Córdoba, delivery y take away.">
 <meta name="theme-color" content="#F7C6D4">
+<meta name="color-scheme" content="only light">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ricaso">
+<meta property="og:title" content="Ricaso · Carta">
+<meta property="og:description" content="Carta de Ricaso: burgers, wraps, lomos, milanesas, ensaladas y tragos. Sucursales en Córdoba, delivery y take away.">
+<meta name="apple-mobile-web-app-title" content="Ricaso">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23FFD23F'/%3E%3Ctext x='32' y='46' font-size='40' font-weight='700' text-anchor='middle' font-family=%22system-ui,-apple-system,'Segoe UI',Roboto,sans-serif%22 fill='%23161616'%3ER%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Permanent+Marker&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
@@ -35,7 +44,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .note{--sw:1.4px;--ts:2px 2px 0;font-size:.95rem;text-transform:uppercase}
 
 /* ---------- hero ---------- */
-.hero{position:relative;padding:28px 0 22px;text-align:center}
+.hero{position:relative;padding:28px 16px 22px;text-align:center}
 .hero-in{display:flex;align-items:center;justify-content:center;gap:clamp(8px,4vw,40px)}
 .logo{--sw:4px;--ts:6px 7px 0;font-size:clamp(4.2rem,16vw,8.5rem);transform:rotate(-3deg);display:inline-block;white-space:nowrap}
 .tagline{margin-top:14px;font-weight:900;font-size:1rem;letter-spacing:.02em}
@@ -75,13 +84,14 @@ button{font:inherit;color:inherit;cursor:pointer}
 /* ---------- tablero de items ---------- */
 .board{list-style:none;border:3px solid var(--ink);border-radius:6px;overflow:hidden;box-shadow:var(--shadow);background:var(--paper)}
 .board+.board{margin-top:18px}
-.row{--fg:var(--ink);display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px;padding:10px 14px;background:var(--bg-row);color:var(--fg)}
+.row{--fg:var(--ink);display:grid;grid-template-columns:1fr auto;grid-template-areas:"n pr" "d pr";align-items:center;gap:0 12px;padding:10px 14px;background:var(--bg-row);color:var(--fg)}
+.row h3{grid-area:n}.row p{grid-area:d}.row .prices{grid-area:pr}
 .row+.row{border-top:3px solid var(--ink)}
 .row.y{--bg-row:var(--y)}.row.k{--bg-row:var(--k)}.row.c{--bg-row:var(--c)}.row.o{--bg-row:var(--o)}.row.l{--bg-row:var(--l)}
 .row.p{--bg-row:var(--p);--fg:#fff}.row.r{--bg-row:var(--r);--fg:#fff}
 .row h3{font-family:'Luckiest Guy';font-weight:400;font-size:1.08rem;letter-spacing:.035em;line-height:1.1;text-transform:uppercase;padding-top:2px}
 .row h3 em{font-family:Nunito;font-style:normal;font-weight:800;font-size:.68rem;letter-spacing:0;text-transform:none;opacity:.85}
-.row p{font-weight:700;font-size:.8rem;line-height:1.3;margin-top:2px;opacity:.92;max-width:44ch}
+.row p{font-weight:700;font-size:.8rem;line-height:1.35;margin-top:3px;opacity:.92;max-width:44ch}
 .tag{display:inline-block;margin-left:6px;padding:2px 7px 0;border:2px solid var(--ink);border-radius:999px;background:var(--paper);color:var(--ink);font-size:.62rem;vertical-align:middle;transform:rotate(-4deg)}
 .prices{display:flex;gap:14px;text-align:center}
 .pr{font-family:'Permanent Marker',cursive;font-size:1.3rem;line-height:1;white-space:nowrap}
@@ -110,7 +120,19 @@ button{font:inherit;color:inherit;cursor:pointer}
 .foot-brand .logo{font-size:3.4rem;--sw:3px;--ts:4px 5px 0}
 
 /* ---------- FAB + toast ---------- */
-.fab{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;background:#25D366}
+/* pedido (módulo compartido) con el trazo de la marca */
+body .pd-bar,body .pd-main{background:var(--y);color:var(--ink);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+body .pd-bar{height:58px}body .pd-bar .pd-t{font-family:'Permanent Marker',cursive;font-size:1.25rem}
+body .pd-main{font-family:'Luckiest Guy',cursive;font-weight:400;font-size:1.1rem;letter-spacing:.04em;padding-top:3px}
+body .pd-main.pd-wa{background:#25D366;color:var(--ink)}
+body .pd-ghost{border:3px solid var(--ink);font-weight:900}
+body .pd-fab,body .pd-search input{border:3px solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+body .pd-search input:focus{border-color:var(--ink);box-shadow:5px 5px 0 var(--ink)}
+body .pd-search input{font-weight:800}
+body .pd-box{border:3px solid var(--ink);border-bottom:0}
+body .pd-tot b,body .pd-info .pd-price,body .pd-opt em{font-family:'Permanent Marker',cursive}
+body .pd-hd h2,body .pd-info h2{padding-top:4px}
+@media (min-width:640px){body .pd-box{border-bottom:3px solid var(--ink)}}
 .toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);opacity:0;z-index:40;padding:10px 18px 8px;background:var(--ink);color:#fff;border-radius:999px;font-family:'Luckiest Guy';letter-spacing:.04em;transition:.25s;pointer-events:none}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
@@ -130,7 +152,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .nav a[aria-current="true"]{animation:chip .4s cubic-bezier(.34,1.56,.64,1)}
 .row{transition:transform .12s}
 .row:active{transform:scale(.985)}
-.fab{animation:nudge 5s 2s ease-in-out infinite}
+.btn.wa{background:#25D366;animation:nudge 5s 2s ease-in-out infinite}
 .status i{position:relative}
 .status i::after{content:"";position:absolute;inset:0;border-radius:50%;background:inherit;animation:ping 1.8s ease-out infinite}
 @keyframes pop{0%{transform:translateY(35%) scale(.5) rotate(-10deg);opacity:0}60%{opacity:1;transform:translateY(-4%) scale(1.06) rotate(3deg)}100%{transform:none}}
@@ -146,10 +168,16 @@ button{font:inherit;color:inherit;cursor:pointer}
 @keyframes nudge{0%,88%,100%{transform:none}91%{transform:rotate(-8deg) scale(1.08)}94%{transform:rotate(7deg) scale(1.08)}97%{transform:rotate(-4deg)}}
 @keyframes ping{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.6);opacity:0}}
 @media (max-width:640px){
-  .logo{font-size:13.5vw}.hero-in{gap:8px}.hero .mascot{width:26vw}
+  .logo{font-size:15vw}.hero .mascot{width:27vw}
+  .hero-in{display:grid;grid-template-columns:1fr auto;align-items:center;gap:0 10px;justify-items:center}
+  .hero-in>div{display:contents}
+  .hero-in .logo{grid-area:1/1;justify-self:end}.hero-in .mascot{grid-area:1/2;justify-self:start}
+  .hero-in .tagline{grid-area:2/1/3/3}.hero-in .status{grid-area:3/1/4/3}
+  .tagline{margin-top:12px;font-size:.95rem}
   .hero .bubble{position:static;display:inline-block;margin-bottom:6px}
   .hero .bubble::after{display:none}
-  .row{padding:10px 12px}
+  .row{grid-template-areas:"n pr" "d d";padding:10px 12px}
+  .row p{max-width:none}
   .prices{gap:10px}.pr{font-size:1.12rem}
   .aside .mascot{height:104px}.bubble{font-size:.74rem;max-width:150px}
 }
@@ -175,6 +203,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="actions">
     <a class="btn k" href="https://instagram.com/ricasocba" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>@Ricasocba</a>
     <button class="btn c" type="button" data-copy="hacete amigo2025"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1.2" fill="currentColor"/></svg>Copiar WiFi</button>
+    <a class="btn wa" href="https://wa.me/5493518626600" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.6 20.4l1.2-4.1a8.4 8.4 0 1 1 3.1 3z"/></svg>Pedí ya</a>
   </div>
 </header>
 
@@ -201,7 +230,6 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="card foot-brand"><img class="mascot fx i-groove" src="img/rojo.webp" width="720" height="682" alt="" loading="lazy" decoding="async" style="width:110px"><span class="logo">Ricaso</span></div>
 </footer>
 
-<a class="btn fab" href="https://wa.me/5493518626600" target="_blank" rel="noopener" aria-label="Pedir por WhatsApp">Pedí ya</a>
 <div class="toast" id="toast" aria-live="polite"></div>
 
 <script>
@@ -351,7 +379,7 @@ const MASCOTS = {
 const mascot = m => { const [f, w, h, idle] = MASCOTS[m]; return `<img class="mascot fx i-${idle}" src="img/${f}.webp" width="${w}" height="${h}" alt="" loading="lazy" decoding="async">`; };
 
 const row = (it, col) => `<li class="row ${col}"${Pedido.attr(it.n, it.p, {d: it.d})}>
-  <div><h3>${it.n}${it.u ? ` <em>${it.u}</em>` : ''}${it.tag ? `<span class="tag">${it.tag}</span>` : ''}</h3>${it.d ? `<p>${it.d}</p>` : ''}</div>
+  <h3>${it.n}${it.u ? ` <em>${it.u}</em>` : ''}${it.tag ? `<span class="tag">${it.tag}</span>` : ''}</h3>${it.d ? `<p>${it.d}</p>` : ''}
   <div class="prices">${it.p && typeof it.p === 'object' ? Object.entries(it.p).map(([k, v]) => price(v, k)).join('') : price(it.p)}</div>
 </li>`;
 
@@ -372,7 +400,7 @@ document.getElementById('nav').innerHTML = allSecs.map(s => `<li><a href="#${s.i
   + '<li><a href="#sucursales">Sucursales</a></li>';
 
 // ---------- pedido para el salón (módulo compartido) ----------
-Pedido.init({"theme": {"btn": "#161616", "btnFg": "#ffd23f", "bg": "#ffffff", "fg": "#161616", "mute": "#5b5560", "line": "rgba(22,22,22,.18)", "price": "#7a45cc", "field": "rgba(22,22,22,.07)", "font": "Nunito,system-ui,sans-serif", "head": "'Luckiest Guy',cursive"}});
+Pedido.init({whatsapp: '5493518626600', theme: {btn: '#161616', btnFg: '#ffd23f', bg: '#ffffff', fg: '#161616', mute: '#5b5560', line: 'rgba(22,22,22,.18)', price: '#7a45cc', field: 'rgba(22,22,22,.07)', font: 'Nunito,system-ui,sans-serif', head: "'Luckiest Guy',cursive", radius: '12px', sheet: '20px'}});
 
 document.getElementById('branches').innerHTML = BRANCHES.map(b => {
   const wa = '549' + b.tel.replace(/\D/g, '');
