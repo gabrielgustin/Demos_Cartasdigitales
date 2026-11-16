@@ -169,6 +169,20 @@ body.pd-lock{overflow:hidden}
 .pd-fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px);mask-image:linear-gradient(90deg,transparent,#000 28px)}
 .pd-fr{-webkit-mask-image:linear-gradient(270deg,transparent,#000 28px);mask-image:linear-gradient(270deg,transparent,#000 28px)}
 .pd-fl.pd-fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent,#000 28px,#000 calc(100% - 28px),transparent)}
+/* botón "ver todas las secciones": queda fijo al inicio mientras los chips se deslizan por detrás */
+.pd-idx{position:sticky;left:0;z-index:2;display:flex;align-items:center;flex:none;padding-right:2px;list-style:none}
+.pd-idx::after{content:"";position:absolute;top:0;bottom:0;left:100%;width:14px;background:linear-gradient(90deg,rgba(0,0,0,.14),transparent);opacity:0;transition:opacity .2s;pointer-events:none}
+.pd-moved .pd-idx::after{opacity:1}
+.pd-idx button{display:grid;place-items:center;flex:none;margin:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.pd-idx button svg{width:16px;height:16px}
+.pd-idx button:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.pd-secs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 18px max(22px,env(safe-area-inset-bottom))}
+.pd-sec{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:54px;margin:0;padding:8px 14px;border:1.5px solid var(--pd-line);border-radius:14px;border-radius:min(14px,var(--pd-r));background:var(--pd-field);color:var(--pd-fg);font:600 .92rem/1.2 var(--pd-font);letter-spacing:0;text-transform:none;text-align:left;cursor:pointer;transition:border-color .15s,transform .12s;-webkit-tap-highlight-color:transparent}
+.pd-sec:hover{border-color:var(--pd-btn)}
+.pd-sec:active{transform:scale(.97)}
+.pd-sec.pd-sel{border-color:var(--pd-btn);background:var(--pd-btn);color:var(--pd-btn-fg)}
+.pd-sec span{min-width:0;overflow-wrap:anywhere}
+.pd-sec small{flex:none;font:600 .75rem/1 var(--pd-font);opacity:.6;font-variant-numeric:tabular-nums}
 
 @media (prefers-reduced-motion:reduce){
   .pd-ov,.pd-box,.pd-bar,.pd-fab,.pd-toast,.pd-pop{animation:none}

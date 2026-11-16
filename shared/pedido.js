@@ -41,6 +41,7 @@ const T = {
   search: '¿Qué tenés ganas de comer?', searchLabel: 'Buscar en la carta', clearSearch: 'Borrar búsqueda',
   results: n => n === 1 ? '1 resultado' : `${n} resultados`, none: q => `No encontramos nada con “${q}”.`,
   wa: 'Enviar por WhatsApp', waHi: 'Hola, quiero hacer este pedido:',
+  index: 'Secciones', indexLabel: 'Ver todas las secciones',
 };
 
 const svg = (d, w = 2) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
@@ -53,6 +54,7 @@ const ICON = {
   check: svg('<path d="M5 12.5l4.5 4.5L19 7.5"/>', 2.6),
   trash: svg('<path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/>'),
   search: svg('<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/>'),
+  grid: svg('<rect x="4" y="4" width="6.500" height="6.500" rx="1.500"/><rect x="13.500" y="4" width="6.500" height="6.500" rx="1.500"/><rect x="4" y="13.500" width="6.500" height="6.500" rx="1.500"/><rect x="13.500" y="13.500" width="6.500" height="6.500" rx="1.500"/>'),
   bag: svg('<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M12 11h4M12 16h4M8 11h.01M8 16h.01"/>'),
   wa: svg('<path d="M3.6 20.4l1.2-4.1a8.4 8.4 0 1 1 3.1 3z"/><path d="M9.2 8.6c-.3 2.9 2.600 5.900 5.900 6.200l1.100-1.400-1.900-1-.8.800c-.9-.5-1.500-1.100-2-2l.8-.8-1-1.900z" fill="currentColor" stroke="none"/>', 1.8),
 };
@@ -513,11 +515,46 @@ function setupSearch(root, o) {
 }
 
 // ---------- lista de secciones: borde difuminado donde hay más para deslizar ----------
+// Con 6 o más secciones se suma un botón fijo al inicio que abre el índice completo. Toma el aspecto
+// de los chips de cada carta (color, borde, radio) para no desentonar con ninguna marca.
+function openIndex(ul) {
+  const links = [...ul.querySelectorAll('a[href^="#"]')];
+  modal(m => h('div', {class: 'pd-view'},
+    header(m, T.index),
+    h('div', {class: 'pd-scroll'}, h('div', {class: 'pd-secs'}, links.map((a, i) => {
+      let sec = null; try { sec = document.querySelector(a.hash); } catch {}
+      const n = sec ? sec.querySelectorAll('[data-pd]').length : 0;
+      const on = a.getAttribute('aria-current') === 'true';
+      // se cierra la hoja y recién después se salta: así el salto usa el comportamiento propio de la carta
+      return h('button', {class: 'pd-sec' + (on ? ' pd-sel' : ''), type: 'button', 'data-first': on || (i === 0 && !links.some(l => l.getAttribute('aria-current') === 'true')) || null,
+        onclick: () => { m.close(); setTimeout(() => a.click(), calm() ? 0 : 230); }}, h('span', {}, a.textContent.trim()), n ? h('small', {}, String(n)) : null);
+    })))), {label: T.index});
+}
+function indexButton(ul) {
+  if (ul.querySelector('.pd-idx')) return;
+  const first = ul.querySelector('a[href^="#"]');
+  if (!first || ul.querySelectorAll('a[href^="#"]').length < 6) return;
+  const cs = getComputedStyle(first), ucs = getComputedStyle(ul);
+  let bg = 'transparent';
+  for (let p = ul; p && p !== document.documentElement; p = p.parentElement) {
+    const c = getComputedStyle(p).backgroundColor;
+    if (c && c !== 'transparent' && !/, 0\)$/.test(c)) { bg = c.replace(/rgba\(([^,]+),([^,]+),([^,]+),[^)]+\)/, 'rgb($1,$2,$3)'); break; }
+  }
+  const btn = h('button', {type: 'button', 'aria-label': T.indexLabel, html: ICON.grid, onclick: () => openIndex(ul)});
+  const size = Math.max(30, first.offsetHeight) + 'px', pad = parseFloat(ucs.paddingLeft) || 0;
+  Object.assign(btn.style, {width: size, height: size, color: cs.color, backgroundColor: cs.backgroundColor,
+    border: `${cs.borderTopWidth} ${cs.borderTopStyle} ${cs.borderTopColor}`, borderRadius: cs.borderTopLeftRadius});
+  const li = h('li', {class: 'pd-idx'}, btn);
+  Object.assign(li.style, {marginLeft: -pad + 'px', paddingLeft: pad + 'px', background: bg});
+  ul.prepend(li);
+}
 function setupNav(sel) {
   const ul = document.querySelector(sel || '#nav'); if (!ul) return;
   const upd = () => {
-    const max = ul.scrollWidth - ul.clientWidth;
-    ul.classList.toggle('pd-fl', ul.scrollLeft > 6); ul.classList.toggle('pd-fr', ul.scrollLeft < max - 6);
+    indexButton(ul);
+    const max = ul.scrollWidth - ul.clientWidth, idx = !!ul.querySelector('.pd-idx');
+    ul.classList.toggle('pd-fl', !idx && ul.scrollLeft > 6); ul.classList.toggle('pd-fr', ul.scrollLeft < max - 6);
+    ul.classList.toggle('pd-moved', ul.scrollLeft > 6);
   };
   ul.addEventListener('scroll', upd, {passive: true});
   addEventListener('resize', upd, {passive: true});
