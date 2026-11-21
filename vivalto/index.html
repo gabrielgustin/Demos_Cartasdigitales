@@ -38,6 +38,7 @@ body{font-family:Montserrat,system-ui,sans-serif;color:#fff;background:var(--t-3
   .grid{grid-template-columns:repeat(3,1fr);padding-top:20px}
   .span2{grid-column:span 2}
   .span2 .cols{columns:2;column-gap:36px}
+  .span3{grid-column:1/-1}.span3 .cols{columns:3;column-gap:44px}
 }
 
 /* encabezado de sección: serif fino en versalitas, nota a la derecha y filete */
@@ -71,13 +72,6 @@ body{font-family:Montserrat,system-ui,sans-serif;color:#fff;background:var(--t-3
 .pan .it h4{font-weight:500;font-size:.88rem}
 .gluten{display:flex;align-items:center;gap:12px;margin-top:22px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;letter-spacing:.04em;text-transform:uppercase}
 .gluten svg{flex:none;width:34px;height:34px}
-
-/* fotos de la carta, rectas y con su leyenda impresa */
-.foto{margin-top:22px;break-inside:avoid}
-.foto img{display:block;width:100%;height:auto;background:#0d2a36;box-shadow:0 14px 30px -14px rgba(0,20,30,.8)}
-.fotos2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:22px}
-.fotos2 .foto{margin-top:0}
-@media (max-width:959px){.solo{max-width:440px;margin-inline:auto}}
 
 footer{padding:26px 20px 40px;text-align:center;font-size:.7rem;letter-spacing:.06em;color:var(--mute);background:var(--t-2)}
 </style>
@@ -169,17 +163,9 @@ const S = {
   ['Pappardelle', 18500, 'Pasta cinta ancha artesanal. <b>Salsas:</b> Bolognesa, Fileto o crema.'],
  ]},
 };
-// fotos impresas en la carta: [archivo, ancho, alto, texto alternativo]
-const F = {
- redvelvet: ['redvelvet', 983, 1555, 'Café y red velvet'], combo: ['combo', 947, 2043, 'Combo Vivalto: café, jugo de naranja y avocado toast'],
- shake: ['shake', 958, 1310, 'Licuado con crema frente al cartel de neón de Vivalto'], ciabatta: ['ciabatta', 804, 1261, 'Ciabatta de pollo con papas gajo'],
- padthai: ['padthai', 833, 1095, 'Pad thai con langostinos'], burger: ['burger', 930, 1403, 'Vivalto burger con papas gajo'],
-};
-
 // ---------- render ----------
 const money = n => '$ ' + n.toLocaleString('es-AR');
 const item = ([n, p, d, ic]) => `<li class="it"${Pedido.attr(n, p, {d})}>${ic ? CUP[ic] : ''}<h4>${n}</h4><span class="pr">${money(p)}</span>${d ? `<p>${d}</p>` : ''}</li>`;
-const foto = k => { const [f, w, h, alt] = F[k]; return `<figure class="foto"><img src="img/${f}.webp" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async"></figure>`; };
 const sec = (id, o = {}) => { const s = S[id]; return `<section class="sec ${s.cls || ''} ${o.cls || ''}" id="${id}" aria-labelledby="${id}-t">
   <div class="hd${s.centro ? ' centro' : ''}"><h2 id="${id}-t">${s.t}</h2>${s.nota ? `<p class="nota">${s.nota}</p>` : ''}</div>
   ${s.lead ? `<p class="lead">${s.lead}</p>` : ''}
@@ -194,22 +180,21 @@ document.getElementById('menu').innerHTML = `
 <div class="hoja"><div class="grid">
   <div>${sec('cafeteria')}</div>
   <div>${sec('especial')}${sec('macchiatos')}</div>
-  <div>${sec('te', {after: `<div class="solo">${foto('redvelvet')}</div>`})}</div>
-  <div class="span2">${sec('desayunos', {after: `<div class="fotos2">${foto('shake')}${foto('combo')}</div>`})}</div>
+  <div>${sec('te')}</div>
+  <div class="span2">${sec('desayunos')}</div>
   <div>${sec('panaderia')}</div>
 </div></div>
 <div class="hoja"><div class="grid">
   <div>${sec('brunch')}</div>
-  <div>${sec('entradas', {after: `<div class="solo">${foto('ciabatta')}</div>`})}</div>
-  <div>${sec('sandwiches', {after: `<div class="solo">${foto('padthai')}</div>`})}</div>
-  <div class="span2">${sec('principales')}</div>
-  <div><div class="solo" style="padding-top:30px">${foto('burger')}</div></div>
+  <div>${sec('entradas')}</div>
+  <div>${sec('sandwiches')}</div>
+  <div class="span3">${sec('principales')}</div>
 </div></div>`;
 const ORDEN = ['cafeteria', 'especial', 'macchiatos', 'te', 'desayunos', 'panaderia', 'brunch', 'entradas', 'sandwiches', 'principales'];
 document.getElementById('nav').innerHTML = ORDEN.map(id => `<li><a href="#${id}">${S[id].nav || S[id].t}</a></li>`).join('');
 
 // ---------- pedido para el salón (módulo compartido) ----------
-// containers: al buscar también se ocultan las columnas y hojas sin resultados (incluida la columna que solo tiene la foto de la burger)
+// containers: al buscar también se ocultan las columnas y hojas sin resultados 
 Pedido.init({containers: 'section, .items, .cols, .grid > div, .hoja', theme: {btn: '#ffffff', btnFg: '#1d6580', bg: '#1d6580', fg: '#ffffff', mute: 'rgba(255,255,255,.8)', line: 'rgba(255,255,255,.3)', price: '#ffffff', field: 'rgba(255,255,255,.12)', font: 'Montserrat,system-ui,sans-serif'}});
 
 // la carta se dibuja con JS: el navegador ya no salta solo al #hash
