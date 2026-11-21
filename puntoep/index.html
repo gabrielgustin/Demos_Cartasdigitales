@@ -24,14 +24,15 @@ h1,h2,h3{font-family:'Barlow Condensed',system-ui,sans-serif;text-transform:uppe
 .slash{position:absolute;height:34px;width:150px;background:repeating-linear-gradient(115deg,var(--r) 0 18px,transparent 18px 28px);opacity:.95}
 
 /* ---------- portada ---------- */
-.hero{position:relative;overflow:hidden;padding:28px 20px 34px;text-align:center;background:radial-gradient(120% 80% at 70% 0%,#3a0b0e 0%,var(--k) 60%)}
+.hero{position:relative;overflow:hidden;padding:28px 20px 30px;text-align:center;background:radial-gradient(120% 80% at 70% 0%,#3a0b0e 0%,var(--k) 60%)}
 .hero .slash{top:18px;right:-20px}.hero .slash.b{top:auto;bottom:16px;left:-30px;right:auto}
-.hero .logo{width:118px;height:118px;display:block;margin:0 auto 14px;position:relative;z-index:1;filter:drop-shadow(0 6px 16px rgba(212,18,27,.45))}
-.hero h1{font-style:italic;font-weight:800;font-size:clamp(3rem,15vw,5.6rem);line-height:.92;letter-spacing:.01em;position:relative;z-index:1}
-.hero h1 span{color:var(--r);display:block}
-.ribbon{display:inline-block;background:var(--r);color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.25rem;letter-spacing:.03em;text-transform:uppercase;padding:4px 18px;transform:skewX(-10deg);margin-top:14px;position:relative;z-index:1}
+.hero .logo{width:130px;height:130px;display:block;margin:0 auto;position:relative;z-index:1;filter:drop-shadow(0 6px 16px rgba(212,18,27,.45))}
+.sec h1{font-style:italic;font-weight:800;font-size:clamp(3rem,15vw,4.6rem);line-height:.9;letter-spacing:.01em}
+.sec h1 span{color:var(--r);margin-left:.22em}
+.pre{margin-bottom:22px;padding-bottom:18px;border-bottom:2px solid var(--r)}
+#menu-diario{padding-top:26px}
+.ribbon{display:inline-block;background:var(--r);color:#fff;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.25rem;letter-spacing:.03em;text-transform:uppercase;padding:4px 18px;transform:skewX(-10deg);margin-top:10px}
 .ribbon>span{display:inline-block;transform:skewX(10deg)}
-.cafe{display:block;width:118px;height:118px;margin:18px auto 0;transform:rotate(-8deg);position:relative;z-index:1}
 
 /* ---------- nav ---------- */
 .nav{position:sticky;top:0;z-index:20;background:rgba(17,17,17,.96);backdrop-filter:blur(6px);border-bottom:2px solid var(--r)}
@@ -75,15 +76,6 @@ footer{padding:26px 20px 44px;text-align:center;font-size:.8rem;color:#8a8a8a}
 <header class="hero">
   <span class="slash" aria-hidden="true"></span><span class="slash b" aria-hidden="true"></span>
   <img class="logo" src="img/logo.webp" alt="Punto EP" width="480" height="480">
-  <h1>Menú<span>diario</span></h1>
-  <div class="ribbon"><span>Con bebida + postre</span></div>
-  <svg class="cafe" viewBox="0 0 120 120" role="img" aria-label="El café te lo regalamos">
-    <defs><path id="arc-top" d="M 16 62 A 44 44 0 0 1 104 62"/><path id="arc-bot" d="M 15 60 A 45 45 0 0 0 105 60"/></defs>
-    <circle cx="60" cy="60" r="58" fill="#d4121b"/><circle cx="60" cy="60" r="53" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.2"/>
-    <text font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="13" fill="#fff" letter-spacing="1.4"><textPath href="#arc-top" startOffset="50%" text-anchor="middle">EL CAFÉ TE LO</textPath></text>
-    <text font-family="Barlow Condensed,sans-serif" font-weight="700" font-size="13" fill="#fff" letter-spacing="1.4"><textPath href="#arc-bot" startOffset="50%" text-anchor="middle">REGALAMOS</textPath></text>
-    <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M42 54h34v10a15 15 0 0 1-15 15h-4a15 15 0 0 1-15-15z"/><path d="M76 58h4a5 5 0 0 1 0 11h-5"/><path d="M38 86h42"/><path d="M52 42c-3 3 3 5 0 9M62 42c-3 3 3 5 0 9" stroke-width="2"/></g>
-  </svg>
 </header>
 <nav class="nav" aria-label="Secciones de la carta"><ul id="nav"></ul></nav>
 <main class="wrap" id="menu" style="padding:0"></main>
@@ -109,7 +101,7 @@ footer{padding:26px 20px 44px;text-align:center;font-size:.8rem;color:#8a8a8a}
 // Menú diario y categorías: de la carta impresa. Los productos y TODOS los precios son de ejemplo para la demo.
 // it: [nombre, precio | {variante: precio}, descripción?]
 const SECS = [
- {id: 'menu-diario', t: 'Elegí tu <em>menú</em>', nav: 'Menú diario', brush: '+ Guarnición incluida', lead: 'Todos los menús incluyen bebida y postre.', items: [
+ {id: 'menu-diario', t: 'Elegí tu <em>menú</em>', nav: 'Menú diario', brush: '+ Guarnición incluida', pre: '<h1>Menú<span>diario</span></h1><div class="ribbon"><span>Con bebida + postre</span></div>', items: [
   ['Costeleta de vaca', 14500, 'Con guarnición a elección, bebida y postre.'],
   ['Costeleta de cerdo', 13900, 'Con guarnición a elección, bebida y postre.'],
   ['Bife de pollo', 12900, 'Con guarnición a elección, bebida y postre.'],
@@ -159,7 +151,7 @@ const money = n => '$ ' + n.toLocaleString('es-AR');
 const price = p => typeof p === 'number' ? money(p) : 'Desde ' + money(Math.min(...Object.values(p)));
 const item = ([n, p, d]) => `<li class="it"${Pedido.attr(n, p, {d})}><h4>${n}</h4><span class="pr">${price(p)}</span>${d ? `<p>${d}</p>` : ''}</li>`;
 const section = s => `<section class="sec wrap" id="${s.id}" aria-labelledby="${s.id}-t">
-  <h2 id="${s.id}-t">${s.t}</h2>
+  ${s.pre ? `<div class="pre">${s.pre}</div>` : ''}<h2 id="${s.id}-t">${s.t}</h2>
   ${s.brush ? `<span class="brush"><span>${s.brush}</span></span>` : ''}${s.lead ? `<p class="lead">${s.lead}</p>` : ''}
   <div class="cols"><ul class="items">${s.items.map(item).join('')}</ul></div>
   ${s.chips ? `<span class="brush w"><span>${s.chips.t}</span></span><ul class="chips">${s.chips.items.map(c => `<li>${c}</li>`).join('')}</ul>` : ''}
