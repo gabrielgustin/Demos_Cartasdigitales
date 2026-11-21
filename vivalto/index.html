@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#2f86a3">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Montserrat:wght@400;500;600;700&family=Yellowtail&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../shared/pedido.css">
 <script src="../shared/pedido.js"></script>
 <style>
@@ -19,8 +19,9 @@ html{scroll-behavior:smooth;scroll-padding-top:62px}
 body{font-family:Montserrat,system-ui,sans-serif;color:#fff;background:var(--t-3);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 
 /* ---------- portada ---------- */
-.hero{text-align:center;padding:40px 20px 30px;background:linear-gradient(180deg,var(--t-1),var(--t))}
-.hero h1{font-family:Yellowtail,cursive;font-weight:400;font-size:clamp(4rem,20vw,6.4rem);line-height:1;text-shadow:0 0 18px rgba(255,236,200,.35)}
+.hero{text-align:center;padding:30px 20px 26px;background:linear-gradient(180deg,var(--t-1),var(--t))}
+.hero h1{line-height:0}
+.hero h1 img{display:block;width:min(300px,72vw);height:auto;margin:0 auto;filter:drop-shadow(0 0 16px rgba(255,236,200,.25))}
 .hero p{margin-top:6px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
 
 /* ---------- nav ---------- */
@@ -78,7 +79,7 @@ footer{padding:26px 20px 40px;text-align:center;font-size:.7rem;letter-spacing:.
 </head>
 <body>
 <header class="hero">
-  <h1>Vivalto</h1>
+  <h1><img src="img/logo.webp" alt="Vivalto · Momentos &amp; café" width="914" height="851"></h1>
   <p>Carta</p>
 </header>
 <nav class="nav" aria-label="Secciones de la carta"><ul id="nav"></ul></nav>
