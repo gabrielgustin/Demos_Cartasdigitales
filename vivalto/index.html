@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vivalto · Carta</title>
+<meta name="description" content="Carta de Vivalto: cafetería, té, desayunos y meriendas, panadería, brunch, entradas, sándwiches y principales.">
+<meta name="theme-color" content="#2f86a3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;1,500;1,600&family=Montserrat:wght@400;500;600;700&family=Yellowtail&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../shared/pedido.css">
+<script src="../shared/pedido.js"></script>
+<style>
+:root{--t-1:#3c93b0;--t:#2a7f9c;--t-2:#1d6580;--t-3:#174f66;--mute:rgba(255,255,255,.82);--line:rgba(255,255,255,.55);--hair:rgba(255,255,255,.22)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:62px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:Montserrat,system-ui,sans-serif;color:#fff;background:var(--t-3);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* ---------- portada ---------- */
+.hero{text-align:center;padding:40px 20px 30px;background:linear-gradient(180deg,var(--t-1),var(--t))}
+.hero h1{font-family:Yellowtail,cursive;font-weight:400;font-size:clamp(4rem,20vw,6.4rem);line-height:1;text-shadow:0 0 18px rgba(255,236,200,.35)}
+.hero p{margin-top:6px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mute)}
+
+/* ---------- nav ---------- */
+.nav{position:sticky;top:0;z-index:20;background:rgba(29,101,128,.96);backdrop-filter:blur(6px);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.nav ul{display:flex;gap:6px;overflow-x:auto;list-style:none;padding:10px 16px;max-width:1180px;margin:0 auto;scrollbar-width:none}
+.nav ul::-webkit-scrollbar{display:none}
+.nav a{display:block;white-space:nowrap;padding:6px 14px;border:1px solid rgba(255,255,255,.65);border-radius:999px;color:#fff;text-decoration:none;font-weight:600;font-size:.68rem;letter-spacing:.09em;text-transform:uppercase}
+.nav a[aria-current="true"]{background:#fff;color:var(--t-2)}
+
+/* ---------- hojas de la carta (como el tríptico impreso) ---------- */
+.hoja{background:linear-gradient(180deg,var(--t-1) 0%,var(--t) 45%,var(--t-2) 100%)}
+.hoja+.hoja{border-top:6px solid var(--t-3)}
+.grid{max-width:1180px;margin:0 auto;padding:6px 20px 34px;display:grid;grid-template-columns:1fr;column-gap:44px}
+@media (min-width:960px){
+  .grid{grid-template-columns:repeat(3,1fr);padding-top:20px}
+  .span2{grid-column:span 2}
+  .span2 .cols{columns:2;column-gap:36px}
+}
+
+/* encabezado de sección: serif fino en versalitas, nota a la derecha y filete */
+.sec{padding-top:30px}
+.hd{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.hd h2{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:500;font-size:clamp(1.85rem,7.4vw,2.2rem);line-height:1;letter-spacing:.02em;text-transform:uppercase}
+.hd .nota{max-width:150px;font-size:.66rem;line-height:1.35;text-align:right;color:var(--mute)}
+.hd.centro{justify-content:center;border-top:1px solid var(--line);padding-top:10px;margin-top:10px}
+.lead{margin-top:10px;font-size:.78rem;line-height:1.5;color:var(--mute)}
+
+/* platos */
+.items{list-style:none;margin-top:6px}
+.it{break-inside:avoid;display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:9px 0}
+.it h4{font-weight:700;font-size:.8rem;letter-spacing:.03em;text-transform:uppercase;line-height:1.35}
+.it h4 small{font-weight:500;font-style:italic;font-size:.74rem;letter-spacing:0;text-transform:none}
+.it .pr{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.86rem;white-space:nowrap}
+.it p{grid-column:1/-1;font-size:.76rem;line-height:1.45;color:var(--mute)}
+.it p b{color:#fff;font-weight:600}
+
+/* cafetería: íconos de taza y filetes entre filas */
+.cafe .cols .it{grid-template-columns:44px 1fr auto;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.cafe .cols .it svg{width:38px;height:38px}
+.cafe .cols .it h4{font-weight:500;font-size:.84rem}
+.sub-t{margin-top:18px;font-weight:700;font-size:.92rem;letter-spacing:.04em;text-transform:uppercase}
+.sub-t+.items .it{padding:3px 0}
+.sub-t+.items .it h4{font-weight:400;text-transform:none;font-size:.86rem;letter-spacing:0}
+.sub-t+.items .it .pr{font-weight:500}
+
+/* panadería: lista simple */
+.pan .it{padding:6px 0}
+.pan .it h4{font-weight:500;font-size:.88rem}
+.gluten{display:flex;align-items:center;gap:12px;margin-top:22px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;letter-spacing:.04em;text-transform:uppercase}
+.gluten svg{flex:none;width:34px;height:34px}
+
+/* fotos de la carta, rectas y con su leyenda impresa */
+.foto{margin-top:22px;break-inside:avoid}
+.foto img{display:block;width:100%;height:auto;background:#0d2a36;box-shadow:0 14px 30px -14px rgba(0,20,30,.8)}
+.fotos2{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start;margin-top:22px}
+.fotos2 .foto{margin-top:0}
+@media (max-width:959px){.solo{max-width:440px;margin-inline:auto}}
+
+footer{padding:26px 20px 40px;text-align:center;font-size:.7rem;letter-spacing:.06em;color:var(--mute);background:var(--t-2)}
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>Vivalto</h1>
+  <p>Carta</p>
+</header>
+<nav class="nav" aria-label="Secciones de la carta"><ul id="nav"></ul></nav>
+<main id="menu"></main>
+<footer>Precios en pesos argentinos.</footer>
+
+<script>
+// ---------- íconos de cafetería (como en la carta impresa) ----------
+const CUP = {
+  chico: '<svg viewBox="0 0 40 40" fill="#fff"><path d="M9 7h18v24a3 3 0 0 1-3 3H12a3 3 0 0 1-3-3z"/><path d="M27 12h3a4 4 0 0 1 4 4v3a4 4 0 0 1-4 4h-3v-3h3a1 1 0 0 0 1-1v-3a1 1 0 0 0-1-1h-3z"/></svg>',
+  jarrito: '<svg viewBox="0 0 40 40" fill="#fff"><path d="M4 13h26v6a12 12 0 0 1-12 12h-2A12 12 0 0 1 4 19z"/><path d="M30 15h2a4.5 4.5 0 0 1 0 9h-3.2l1-3H32a1.5 1.5 0 0 0 0-3h-2z"/></svg>',
+  taza: '<svg viewBox="0 0 40 40" fill="#fff"><path d="M3 16h28v2a12 12 0 0 1-12 12h-4A12 12 0 0 1 3 18z"/><path d="M31 17h2a4 4 0 0 1 0 8h-3.5l1.2-3H33a1 1 0 0 0 0-2h-2z"/></svg>',
+};
+const WHEAT = '<svg viewBox="0 0 34 34" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round"><circle cx="17" cy="17" r="15.5"/><path d="M17 27V10M17 14c-3 0-4.5-2-4.5-4.5 3 0 4.5 2 4.5 4.5zm0 0c3 0 4.5-2 4.5-4.5-3 0-4.5 2-4.5 4.5zM17 19c-3 0-4.5-2-4.5-4.5 3 0 4.5 2 4.5 4.5zm0 0c3 0 4.5-2 4.5-4.5-3 0-4.5 2-4.5 4.5zM17 24c-3 0-4.5-2-4.5-4.5 3 0 4.5 2 4.5 4.5zm0 0c3 0 4.5-2 4.5-4.5-3 0-4.5 2-4.5 4.5z"/></svg>';
+
+// ---------- datos (transcriptos de la carta impresa) ----------
+// it: [nombre, precio, descripción?, ícono?]
+const S = {
+ cafeteria: {t: 'Cafetería', nota: 'Nuestras infusiones se sirven a 90°.', cls: 'cafe', items: [
+  ['Café chico', 4000, '', 'chico'], ['Café en jarrito', 4600, '', 'jarrito'], ['Café, café con leche, cortado o lágrima doble', 5200, '', 'taza'],
+ ], extra: {t: 'Adicional', items: [['Crema', 1800], ['Leche de almendras', 2300], ['Leche deslactosada', 1800]]}},
+ especial: {t: 'Especial', items: [
+  ['Cappuccino', 7000, 'Café espresso con la cremosidad de la leche y la espuma. Solicitarlo con cacao, canela o solo.'],
+  ['Submarino', 8000, 'Con chocolate negro o chocolate blanco.'],
+  ['Chocolatada', 6500],
+ ]},
+ macchiatos: {t: 'Macchiatos', nota: 'Pedidos calientes o fríos', lead: 'Shot de espresso, con leche espumada y crema batida, pedilos calientes o fríos.', items: [
+  ['Pistacho', 10500], ['Caramel', 10500], ['Avellana', 10500], ['Vainilla', 10500],
+ ]},
+ te: {t: 'Té', items: [
+  ['Té / Mate cocido <small>(en saquito)</small>', 3900],
+  ['Tropical <small>(en hebras)</small>', 4500, 'Experiencia vibrante y equilibrada, ideal para relajar y refrescar después de las comidas.'],
+  ['Flores de hibiscus <small>(en hebras)</small>', 4500, 'Bebida natural y revitalizante, con notas ácidas y afrutadas. Ideal después de las comidas.'],
+  ['Chai <small>(en hebras)</small>', 4500, 'Infusión tradicional, reconfortante, con especias aromáticas y un sutil toque dulce.'],
+  ['Frutos del bosque <small>(en hebras)</small>', 4500, 'Notas frutales y frescas de menta, en una combinación armoniosa y refrescante.'],
+ ]},
+ desayunos: {t: 'Desayunos y meriendas', nav: 'Desayunos', nota: 'Con infusión de cafetería clásica a elección.', lead: 'Como sabemos que nuestro café es muy rico y siempre te quedás con ganas de más, agrandamos la taza (365cc) en todos nuestros desayunos y meriendas.', items: [
+  ['Clásico', 8900, 'Dos productos de panadería + infusión.'],
+  ['Completo', 12900, 'Dos productos de panadería, jugo de naranjas chico, dulce de leche, manteca + infusión.'],
+  ['Americano', 18500, 'Dos tostadas de pan de campo, jugo de naranjas mediano, huevo revuelto, panceta ahumada, queso dambo + infusión.'],
+  ['Light', 14900, 'Tostadas de pan negro, feta de jamón y queso, queso untable, mermelada, jugo de naranjas chico + infusión.'],
+  ['Energético', 18900, 'Bowl de yogurt natural, frutas de estación, granola con frutos secos y coco, acompañado de jugo exprimido de naranjas o infusión.'],
+  ['Proteico', 19500, 'Dos fetas de jamón y queso, dos huevos revueltos, palta fresca, jugo de naranjas mediano, tostadas de pan negro + infusión.'],
+  ['Vivalto', 21000, 'Avocado toast, jugo de naranjas mediano + infusión.'],
+ ]},
+ panaderia: {t: 'Panadería', cls: 'pan', gluten: true, items: [
+  ['Criollo', 1900], ['Medialuna', 2600], ['Croissant', 4500], ['Chipa x2', 2500],
+  ['Cookie <small>(consultá variedad)</small>', 7500], ['Alfajor <small>(consultá variedad)</small>', 7500],
+  ['Mafaldas x2', 10500], ['Porción de torta', 10500], ['Porción de budín', 6500],
+ ]},
+ brunch: {t: 'Brunch', items: [
+  ['Waffle dulce', 14900, 'Waffle casero con helado cremoso de palta y chocolate blanco, pasta de avellanas, frutas de temporada y frutos secos.'],
+  ['Bagel proteico', 17500, 'Bagel multicereal, queso crema, gajos de palta fresca, jamón en fetas, huevo revuelto y queso dambo.'],
+  ['American toast', 14500, 'Tostón de pan de campo casero con manteca especiada, huevo revuelto, queso gratinado, panceta y ciboulette.'],
+  ['Avocado toast', 13000, 'Tostón de pan de campo casero con queso crema, gajos de palta fresca, dos huevos poché, tomates cherrys y mix de semillas.'],
+  ['Omelette de JyQ', 14000, 'Omelette de tres huevos con jamón y queso. Acompañado de mezclum de verdes y tomates cherrys.'],
+  ['Omelette de langostinos', 25000, 'Omelette de tres huevos con langostinos a la manteca y ralladura de limón. Acompañado de mezclum de verdes y tomates cherrys.'],
+  ['Omelette veggie', 14000, 'Omelette de tres huevos con mix de verduras asadas y queso. Acompañado de mezclum de verdes y tomates cherrys.'],
+ ]},
+ entradas: {t: 'Entradas', items: [
+  ['Papas gajo', 19000, 'Con cheddar fundido y panceta crocante.'],
+  ['Tablita de fiambres', 17500, 'Selección de fiambres y quesos para compartir.'],
+ ]},
+ sandwiches: {t: 'Sándwiches', items: [
+  ['Clásico', 12900, 'Pan inglés, jamón y queso. Acompañado de papas chips.'],
+  ['Ciabatta napolitana', 16500, 'Pan ciabatta con manteca especiada, jamón, queso dambo, mozzarella gratinada, cherrys confitados y orégano. Acompañada de papas gajo.'],
+  ['Ciabatta de pollo', 18900, 'Pan ciabatta con manteca especiada, pechuga a la plancha, rúcula, queso dambo y cherrys confitados. Acompañada de papas gajo.'],
+  ['Ciabatta de crudo', 17500, 'Pan ciabatta con manteca especiada, queso dambo, jamón crudo, rúcula y tomates cherrys. Acompañada de papas gajo.'],
+  ['Vivalto burger', 23000, 'Pan de papa con manteca especiada, doble medallón de carne, doble cheddar, cebolla caramelizada y panceta. Acompañada de papas gajo.'],
+ ]},
+ principales: {t: 'Principales', centro: true, items: [
+  ['Milanesa de ternera', 24000, 'Milanesa de bife de chorizo con guarnición.'],
+  ['Milanesa a caballo', 26900, 'Milanesa de bife de chorizo con dos huevos fritos. Con guarnición.'],
+  ['Milanesa napolitana', 26900, 'Milanesa de bife de chorizo con salsa de tomates, jamón cocido, queso tybo y orégano. Con guarnición.'],
+  ['Milanesa guacamole', 26900, 'Milanesa de bife de chorizo con guacamole y limón. Con guarnición.'],
+  ['Ojo de bife al grill', 29000, 'Acompañado de puré de cabutia finamente especiado con un toque de miel.'],
+  ['Pechuga grillada al limón', 18000, 'Pechuga de pollo grillada, macerada con oliva, romero y limón. Acompañada con mezclum de verdes y tomates cherrys.'],
+  ['Pad Thai', 24000, 'Salteado de fideos finos de arroz, con salsa pad thai, vegetales, dos huevos poché y pollo, langostinos o veggie.'],
+  ['Ñoquis de la Nona', 19500, 'Ñoquis caseros de papa. <b>Salsas:</b> Bolognesa, Fileto o crema.'],
+  ['Sorrentinos de jamón y queso', 24000, '<b>Salsas:</b> Bolognesa, Fileto o crema.'],
+  ['Sorrentinos de ojo de bife', 28000, '<b>Salsas:</b> Bolognesa, Fileto o crema.'],
+  ['Pappardelle', 18500, 'Pasta cinta ancha artesanal. <b>Salsas:</b> Bolognesa, Fileto o crema.'],
+ ]},
+};
+// fotos impresas en la carta: [archivo, ancho, alto, texto alternativo]
+const F = {
+ redvelvet: ['redvelvet', 983, 1555, 'Café y red velvet'], combo: ['combo', 947, 2043, 'Combo Vivalto: café, jugo de naranja y avocado toast'],
+ shake: ['shake', 958, 1310, 'Licuado con crema frente al cartel de neón de Vivalto'], ciabatta: ['ciabatta', 804, 1261, 'Ciabatta de pollo con papas gajo'],
+ padthai: ['padthai', 833, 1095, 'Pad thai con langostinos'], burger: ['burger', 930, 1403, 'Vivalto burger con papas gajo'],
+};
+
+// ---------- render ----------
+const money = n => '$ ' + n.toLocaleString('es-AR');
+const item = ([n, p, d, ic]) => `<li class="it"${Pedido.attr(n, p, {d})}>${ic ? CUP[ic] : ''}<h4>${n}</h4><span class="pr">${money(p)}</span>${d ? `<p>${d}</p>` : ''}</li>`;
+const foto = k => { const [f, w, h, alt] = F[k]; return `<figure class="foto"><img src="img/${f}.webp" alt="${alt}" width="${w}" height="${h}" loading="lazy" decoding="async"></figure>`; };
+const sec = (id, o = {}) => { const s = S[id]; return `<section class="sec ${s.cls || ''} ${o.cls || ''}" id="${id}" aria-labelledby="${id}-t">
+  <div class="hd${s.centro ? ' centro' : ''}"><h2 id="${id}-t">${s.t}</h2>${s.nota ? `<p class="nota">${s.nota}</p>` : ''}</div>
+  ${s.lead ? `<p class="lead">${s.lead}</p>` : ''}
+  <div class="cols"><ul class="items">${s.items.map(item).join('')}</ul></div>
+  ${s.extra ? `<h3 class="sub-t">${s.extra.t}</h3><ul class="items">${s.extra.items.map(item).join('')}</ul>` : ''}
+  ${s.gluten ? `<p class="gluten">${WHEAT}Consultá por opciones sin gluten.</p>` : ''}
+  ${o.after || ''}
+</section>`; };
+
+// misma distribución que el tríptico: en escritorio 3 columnas por hoja, en el celular todo en una columna
+document.getElementById('menu').innerHTML = `
+<div class="hoja"><div class="grid">
+  <div>${sec('cafeteria')}</div>
+  <div>${sec('especial')}${sec('macchiatos')}</div>
+  <div>${sec('te', {after: `<div class="solo">${foto('redvelvet')}</div>`})}</div>
+  <div class="span2">${sec('desayunos', {after: `<div class="fotos2">${foto('shake')}${foto('combo')}</div>`})}</div>
+  <div>${sec('panaderia')}</div>
+</div></div>
+<div class="hoja"><div class="grid">
+  <div>${sec('brunch')}</div>
+  <div>${sec('entradas', {after: `<div class="solo">${foto('ciabatta')}</div>`})}</div>
+  <div>${sec('sandwiches', {after: `<div class="solo">${foto('padthai')}</div>`})}</div>
+  <div class="span2">${sec('principales')}</div>
+  <div><div class="solo" style="padding-top:30px">${foto('burger')}</div></div>
+</div></div>`;
+const ORDEN = ['cafeteria', 'especial', 'macchiatos', 'te', 'desayunos', 'panaderia', 'brunch', 'entradas', 'sandwiches', 'principales'];
+document.getElementById('nav').innerHTML = ORDEN.map(id => `<li><a href="#${id}">${S[id].nav || S[id].t}</a></li>`).join('');
+
+// ---------- pedido para el salón (módulo compartido) ----------
+// containers: al buscar también se ocultan las columnas y hojas sin resultados (incluida la columna que solo tiene la foto de la burger)
+Pedido.init({containers: 'section, .items, .cols, .grid > div, .hoja', theme: {btn: '#ffffff', btnFg: '#1d6580', bg: '#1d6580', fg: '#ffffff', mute: 'rgba(255,255,255,.8)', line: 'rgba(255,255,255,.3)', price: '#ffffff', field: 'rgba(255,255,255,.12)', font: 'Montserrat,system-ui,sans-serif'}});
+
+// la carta se dibuja con JS: el navegador ya no salta solo al #hash
+if (location.hash) document.querySelector(location.hash)?.scrollIntoView();
+
+// ---------- scroll-spy ----------
+const navUl = document.getElementById('nav'), links = [...navUl.querySelectorAll('a')];
+let current;
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  const a = links.find(l => l.hash === '#' + e.target.id);
+  if (!e.isIntersecting || a === current) return;
+  current?.removeAttribute('aria-current');
+  a.setAttribute('aria-current', 'true');
+  current = a;
+  // solo mueve la barra de chips: scrollIntoView también toca el scroll de la página y lo traba
+  navUl.scrollTo({left: a.offsetLeft - (navUl.clientWidth - a.offsetWidth) / 2, behavior: 'smooth'});
+}), {rootMargin: '-40% 0px -55% 0px'});
+document.querySelectorAll('.sec').forEach(s => spy.observe(s));
+// salto sin ensuciar el historial (el botón "atrás" vuelve a salir de la carta)
+navUl.addEventListener('click', e => {
+  const a = e.target.closest('a');
+  if (!a) return;
+  e.preventDefault();
+  document.querySelector(a.hash).scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+});
+</script>
+</body>
+</html>
